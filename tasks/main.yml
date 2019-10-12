@@ -25,3 +25,11 @@
   ping:
   become: True
   when: inventory_hostname != "localhost"
+
+- name: create users accounts
+  include_role:
+    name: exphost.create_user
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+  when: inventory_hostname != "localhost"
