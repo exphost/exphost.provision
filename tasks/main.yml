@@ -2,34 +2,29 @@
   debug:
     msg: "jeste provisionere"
 
+- include_tasks: users.yml
 
-- name: try ping
-  ping:
+- block:
+  - name: set hostname
+    hostname:
+      name: "{{inventory_hostname}}"
+  - name: install epel
+    yum:
+      name: epel-release
+
+  - name: configure yum repos
+    yum_repository:
+      name: "{{item.key}}"
+      description: "{{item.value.description|default(item.key)}}"
+      baseurl: "{{item.value.baseurl}}"
+      gpgcheck: "{{item.value.gpgcheck|default(omit)}}"
+    loop: "{{configs.repos|default({})|dict2items}}"
+
+  - name: turn of firewalld
+    service:
+      name: firewalld
+      state: stopped
+      enabled: False
+    when: configs.firewall is not defied
+
   become: True
-  when: inventory_hostname != "localhost"
-  register: reg_ping
-  ignore_errors: True
-
-- name: aa
-  debug:
-    msg: "{{reg_ping}}"
-
-- name: try to provision
-  include_tasks: "{{item}}"
-  loop: "{{ lookup('fileglob', 'providers/*.yml', wantlist=True) }}"
-  when: reg_ping.unreachable|default(False) or reg_ping.failed|default(False)
-
-- meta: clear_host_errors
-
-- name: try ping after provision
-  ping:
-  become: True
-  when: inventory_hostname != "localhost"
-
-- name: create users accounts
-  include_role:
-    name: exphost.create_user
-  loop: "{{ users }}"
-  loop_control:
-    loop_var: user
-  when: inventory_hostname != "localhost"
