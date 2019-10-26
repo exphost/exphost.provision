@@ -26,6 +26,7 @@
       name: firewalld
       state: stopped
       enabled: False
-    when: configs.firewall is not defied
+    when: configs.firewall is not defined
+  when: inventory_hostname != "localhost"
 
   become: True
