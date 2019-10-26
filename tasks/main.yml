@@ -18,6 +18,7 @@
       description: "{{item.value.description|default(item.key)}}"
       baseurl: "{{item.value.baseurl}}"
       gpgcheck: "{{item.value.gpgcheck|default(omit)}}"
+      skip_if_unavailable: "{{item.value.skip_if_unavailable|default(omit)}}"
     loop: "{{configs.repos|default({})|dict2items}}"
 
   - name: turn of firewalld
