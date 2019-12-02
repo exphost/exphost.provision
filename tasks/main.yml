@@ -21,12 +21,15 @@
       skip_if_unavailable: "{{item.value.skip_if_unavailable|default(omit)}}"
     loop: "{{configs.repos|default({})|dict2items}}"
 
+  - name: populate service facts
+    service_facts:
+
   - name: turn of firewalld
     service:
       name: firewalld
       state: stopped
       enabled: False
-    when: configs.firewall is not defined
+    when: configs.firewall|default(False) and services.firewalld|default(False)
   when: inventory_hostname != "localhost"
 
   become: True
