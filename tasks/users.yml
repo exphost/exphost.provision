@@ -11,7 +11,7 @@
 
 - name: try to provision
   include_tasks: "{{item}}"
-  loop: "{{ lookup('fileglob', 'providers/*.yml', wantlist=True) }}"
+  loop: "{{ lookup('fileglob', FABSIBLE_CWD|default('.')+'/files/providers/*.yml', wantlist=True) }}"
   when: reg_ping.unreachable|default(False) or reg_ping.failed|default(False)
 
 - meta: clear_host_errors
