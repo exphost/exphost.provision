@@ -29,7 +29,7 @@
       name: firewalld
       state: stopped
       enabled: False
-    when: configs.firewall|default(False) and services.firewalld|default(False)
+    when: configs.firewall|default(False) and services['firewalld.service']|default(False)
   when: inventory_hostname != "localhost"
 
   become: True
