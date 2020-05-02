@@ -7,7 +7,7 @@
 - block:
   - name: set hostname
     hostname:
-      name: "{{inventory_hostname}}"
+      name: "{{inventory_hostname}}{% if domain|default(False)%}.{{domain}}{%endif%}"
   - name: install epel
     yum:
       name: epel-release
