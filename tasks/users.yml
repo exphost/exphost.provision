@@ -4,6 +4,7 @@
   when: inventory_hostname != "localhost"
   register: reg_ping
   ignore_errors: True
+  ignore_unreachable: True
 
 - name: aa
   debug:
