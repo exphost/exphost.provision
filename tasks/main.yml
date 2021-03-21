@@ -31,7 +31,7 @@
   - name: populate service facts
     service_facts:
 
-  - name: turn of firewalld
+  - name: turn off firewalld
     service:
       name: firewalld
       state: stopped
