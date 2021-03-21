@@ -12,6 +12,13 @@
     yum:
       name: epel-release
 
+  - name: add hostname to /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      line: "127.0.0.1 {{ inventory_hostname }} # inventory_hostname"
+      regexp: ".* # inventory_hostname"
+      mode: 0644
+
   - name: configure yum repos
     yum_repository:
       name: "{{item.key}}"
